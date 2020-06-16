@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymleaf.org" 
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	 layout:decorator="template.html"
+>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container md-6">
+<div class="card mt-5">
+<div class="card-header">Produits</div>
+<div class="card-body">
+<form th:action="@{/produits}" >
+<div class="form-group">
+<input type="text" name="keyword" th:value="${keyword}">
+<input type="submit" value="Chercher"  class="btn btn-primary">
+</div>
+</form>
+
+
+<table class="table">
+<tr class="text-primary"><td>ID</td><td>Designation</td><td>Prix</td><td>Quantite</td></tr>
+<tr  th:each="p:${produits}">
+<td th:text="${p.id}">ID</td>
+<td th:text="${p.designation}"></td>
+<td th:text="${p.prix}"></td>
+<td th:text="${p.quantite}"></td>
+<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger" onclick="return alert('voules vous la supprimez ??')"
+th:href="@{deleteProduit(id=${p.id},keyword=${keyword},page=${currentPage},size=${size})}">Delete</a></td>
+<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-warning" th:href="@{editProduit(id=${p.id})}">Edit</a></td>
+</tr>
+</table>
+<ul class="nav nav-pills">
+<li th:each="p,s:${pages}">
+<a th:class="${currentPage==s.index? 'btn btn-primary' : 'btn'}" 
+th:href="@{produits(keyword=${keyword},page=${s.index},size=${size})}" 
+th:text="${s.index}"></a>
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</body>
+</html>
